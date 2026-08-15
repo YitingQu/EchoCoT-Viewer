@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>EchoCoT Extraction Explorer</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <div>
+        <div class="eyebrow">Interactive artifact</div>
+        <h1>EchoCoT Extraction Explorer</h1>
+        <p class="subtitle">Inspect target and extracted reasoning traces sample by sample.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell main-grid">
+    <section class="panel controls-panel" aria-label="Controls">
+      <div class="control-grid">
+        <label class="field">
+          <span>Model</span>
+          <select id="modelSelect" disabled>
+            <option>Loading…</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Sample</span>
+          <select id="sampleSelect" disabled>
+            <option>Loading…</option>
+          </select>
+        </label>
+
+        <label class="field search-field">
+          <span>Search in both traces</span>
+          <input id="searchInput" type="search" placeholder="e.g., Wait, Actually, reconsider" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="toolbar">
+        <label class="check"><input id="syncScroll" type="checkbox" checked /> Sync scrolling</label>
+        <label class="check"><input id="wrapText" type="checkbox" checked /> Wrap text</label>
+        <span id="searchCount" class="search-count" aria-live="polite"></span>
+        <span id="status" class="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Sample metrics">
+      <article class="metric-card">
+        <span class="metric-label">Dataset</span>
+        <strong id="dataset" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Sample ID</span>
+        <strong id="sampleId" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Best turn</span>
+        <strong id="bestTurn" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Target tokens</span>
+        <strong id="targetTokens" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Extracted tokens</span>
+        <strong id="extractedTokens" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Length error</span>
+        <strong id="lengthError" class="metric-value">—</strong>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Summary recall</span>
+        <strong id="summaryRecall" class="metric-value">—</strong>
+      </article>
+    </section>
+
+    <nav class="sample-nav" aria-label="Sample navigation">
+      <button id="prevSample" class="nav-button" type="button">← Previous sample</button>
+      <span id="samplePosition" class="sample-position">—</span>
+      <button id="nextSample" class="nav-button" type="button">Next sample →</button>
+    </nav>
+
+    <details class="panel question-panel" open>
+      <summary>Question</summary>
+      <div id="question" class="question-text">—</div>
+    </details>
+
+    <section class="trace-grid" aria-label="Reasoning trace comparison">
+      <article class="panel trace-panel">
+        <div class="trace-header">
+          <div>
+            <div class="trace-kicker">Reference</div>
+            <h2>Target CoT Summary Provided by API</h2>
+          </div>
+          <button id="copyTarget" class="ghost-button" type="button">Copy</button>
+        </div>
+        <div id="targetTrace" class="trace-body wrap" tabindex="0"></div>
+      </article>
+
+      <article class="panel trace-panel">
+        <div class="trace-header">
+          <div>
+            <div class="trace-kicker">EchoCoT</div>
+            <h2>Extracted CoT</h2>
+          </div>
+          <button id="copyExtracted" class="ghost-button" type="button">Copy</button>
+        </div>
+        <div id="extractedTrace" class="trace-body wrap" tabindex="0"></div>
+      </article>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell">Static HTML/CSS/JavaScript only. No backend required.</div>
+  </footer>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
