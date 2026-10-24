@@ -80,6 +80,10 @@ function normalizeSamples(raw, sourceLabel) {
 
 async function tryLoadModel(model) {
   try {
+    // Classic-script data works in Anonymous Science's opaque-origin sandbox.
+    if (Object.prototype.hasOwnProperty.call(window.ECHOCOT_DATA ?? {}, model.file)) {
+      return normalizeSamples(window.ECHOCOT_DATA[model.file], model.file);
+    }
     const response = await fetch(model.file, { cache: "no-store" });
     if (!response.ok) return null;
     const raw = await response.json();
@@ -458,7 +462,12 @@ function updateAddressBar() {
   const url = new URL(location.href);
   url.searchParams.set("model", state.modelId);
   url.searchParams.set("sample", String(state.sampleIndex));
-  history.replaceState(null, "", url);
+  try {
+    history.replaceState(null, "", url);
+  } catch (error) {
+    // Some sandboxes forbid URL changes; keep model/sample navigation usable.
+    if (error.name !== "SecurityError") throw error;
+  }
 }
 
 function goToSample(index) {
